@@ -8,6 +8,7 @@
     "build": "tsc",
     "dev": "nodemon src/index.ts",
     "js": "node dist/index.js",
+    "delpoy": "git push heroku main",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
