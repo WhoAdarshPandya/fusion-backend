@@ -1,9 +1,35 @@
 import express, { Application, Request, Response } from "express";
+import { config } from "dotenv";
+import { connect, Document } from "mongoose";
+import { Todo, todoModel } from "./models";
 
-const PORT = process.env.PORT || 2002;
+config();
 
+const PORT = process.env.PORT;
 const app: Application = express();
-
+// const db = connect(
+//   process.env.DB_URL!,
+//   {
+//     useCreateIndex: true,
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//     useFindAndModify: true,
+//   },
+//   (err) => {
+//     if (err) {
+//       console.log("connection failed");
+//     } else {
+//       console.log("ok");
+//     }
+//   }
+// );
+// (async () => {
+//   const todo: Document<Todo> = new todoModel({
+//     title: "a",
+//     description: "p",
+//   });
+//   await todo.save();
+// })();
 app.get("/", (req: Request, res: Response) => {
   res.json({ msg: "hi fusion api" });
 });
