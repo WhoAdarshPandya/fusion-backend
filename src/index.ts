@@ -1,6 +1,6 @@
 import express, { Application, Request, Response } from "express";
 
-const PORT = 2002;
+const PORT = process.env.PORT || 2002;
 
 const app: Application = express();
 
