@@ -2,11 +2,14 @@ import express, { Application, Request, Response } from "express";
 import { config } from "dotenv";
 import { connect, Document } from "mongoose";
 import { Todo, todoModel } from "./models";
+import cors from "cors";
 
 config();
 
 const PORT = process.env.PORT;
 const app: Application = express();
+app.use(cors());
+app.use(express.json());
 // const db = connect(
 //   process.env.DB_URL!,
 //   {
