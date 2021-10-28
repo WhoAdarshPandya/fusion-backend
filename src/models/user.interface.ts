@@ -6,6 +6,7 @@ export interface User {
   friend_id: string;
   chat_id: string;
   todo_id: string;
+  request_id: String;
   theme: string;
   password: string;
   profile_url: string;

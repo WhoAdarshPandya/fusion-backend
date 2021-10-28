@@ -12,12 +12,14 @@ export const initCloudinary = (): void => {
   });
 };
 
-export const uploadImage = async (): Promise<UploadApiResponse> => {
+export const uploadImage = async (
+  imageUrl: string
+): Promise<UploadApiResponse> => {
   const res: UploadApiResponse = await cloudinary.v2.uploader.upload(
-    "./src/app.png",
+    imageUrl,
     {
       resource_type: "image",
-      public_id: `profile${v4()}`,
+      public_id: `profile-${v4()}`,
       overwrite: true,
       folder: "profiles",
     },

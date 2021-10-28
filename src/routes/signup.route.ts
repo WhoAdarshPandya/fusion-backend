@@ -3,4 +3,4 @@ import { signUpHandler } from "../controllers";
 
 export const signUpRouter = Router();
 
-signUpRouter.get("/", signUpHandler);
+signUpRouter.post("/", signUpHandler);

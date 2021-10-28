@@ -7,6 +7,8 @@ import { limiter } from "./utils";
 import http from "http";
 import { Server, Socket } from "socket.io";
 import { loginRouter, signUpRouter } from "./routes";
+import { Document } from "mongoose";
+import { Todo, todoModel } from "./models";
 
 /*
  * अपनी रचनाओं में वो ज़िंदा है
@@ -30,14 +32,6 @@ connectDB();
 io.on("connection", (socket: Socket) => {
   console.log(socket);
 });
-
-// (async () => {
-//   const todo: Document<Todo> = new todoModel({
-//     title: "dep",
-//     description: "loyed",
-//   });
-//   await todo.save();
-// })();
 
 app.get("/", (req: Request, res: Response) => {
   res.json({ msg: "hi from fusion api" });

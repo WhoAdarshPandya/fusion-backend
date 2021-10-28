@@ -3,6 +3,6 @@ import { loginHandler } from "../controllers";
 
 export const loginRouter = Router();
 
-loginRouter.get("/", loginHandler);
+loginRouter.post("/", loginHandler);
 
 // export loginRouter;

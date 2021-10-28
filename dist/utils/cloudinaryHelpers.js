@@ -25,10 +25,10 @@ const initCloudinary = () => {
     });
 };
 exports.initCloudinary = initCloudinary;
-const uploadImage = () => __awaiter(void 0, void 0, void 0, function* () {
-    const res = yield cloudinary_1.default.v2.uploader.upload("./src/app.png", {
+const uploadImage = (imageUrl) => __awaiter(void 0, void 0, void 0, function* () {
+    const res = yield cloudinary_1.default.v2.uploader.upload(imageUrl, {
         resource_type: "image",
-        public_id: `profile${(0, uuid_1.v4)()}`,
+        public_id: `profile-${(0, uuid_1.v4)()}`,
         overwrite: true,
         folder: "profiles",
     }, (err, res) => {

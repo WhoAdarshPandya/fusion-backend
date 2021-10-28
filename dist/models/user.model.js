@@ -10,6 +10,7 @@ const userSchema = new mongoose_1.Schema({
     friend_id: { type: String, required: true },
     chat_id: { type: String, required: true },
     todo_id: { type: String, required: true },
+    request_id: { type: String, required: true },
     theme: { type: String, required: true },
     password: { type: String, required: true },
     profile_url: { type: String, required: true },
