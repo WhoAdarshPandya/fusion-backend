@@ -1,1 +1,5 @@
-export { insertUser, findUserByEmailOrUserName } from "./db.helpers";
+export {
+  insertUser,
+  findUserByEmailOrUserName,
+  getAllUserData,
+} from "./db.helpers";

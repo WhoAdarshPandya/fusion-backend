@@ -12,6 +12,7 @@ const utils_1 = require("./utils");
 const http_1 = __importDefault(require("http"));
 const socket_io_1 = require("socket.io");
 const routes_1 = require("./routes");
+const middleware_1 = require("./middleware");
 (0, dotenv_1.config)();
 const PORT = process.env.PORT;
 const app = (0, express_1.default)();
@@ -30,6 +31,10 @@ app.get("/", (req, res) => {
 });
 app.use("/api/v1/login", routes_1.loginRouter);
 app.use("/api/v1/signup", routes_1.signUpRouter);
+app.use("/api/v1/user", middleware_1.verifyToken, routes_1.userRouter);
+app.get("/api/private", middleware_1.verifyToken, (req, res) => {
+    res.json({ msg: "hello" });
+});
 server.listen(PORT, () => {
     console.log(`app is running on port ${PORT}`);
 });

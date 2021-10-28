@@ -45,15 +45,20 @@ export const insertUser = async (data: {
   profile_url: string;
   joined_at: string;
 }) => {
+  const user_id = v4();
+  const todo_id = v4();
+  const request_id = v4();
+  const chat_id = v4();
+  const friend_id = v4();
   const user: Document<User> = new userModel({
-    user_id: v4(),
+    user_id,
     name: data.name,
     user_name: data.user_name,
     email: data.email,
-    friend_id: v4(),
-    chat_id: v4(),
-    todo_id: v4(),
-    request_id: v4(),
+    friend_id,
+    chat_id,
+    todo_id,
+    request_id,
     theme: "orange",
     password: data.password,
     profile_url: data.profile_url,
@@ -66,4 +71,15 @@ export const insertUser = async (data: {
     .then((res) => ({ msg: "inserted", success: true, res }))
     .catch((err) => ({ msg: "inserted", success: false, err }));
   return resp;
+  //   TODO add defaults for other collection
+};
+
+export const getAllUserData = async (id: string) => {
+  const data = await userModel
+    .find({ user_id: id })
+    .then((result) => {
+      return { success: true, result };
+    })
+    .catch((err) => ({ err, success: false }));
+  return data;
 };

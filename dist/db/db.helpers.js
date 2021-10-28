@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.insertUser = exports.findUserByEmailOrUserName = void 0;
+exports.getAllUserData = exports.insertUser = exports.findUserByEmailOrUserName = void 0;
 const models_1 = require("../models");
 const uuid_1 = require("uuid");
 const findUserByEmailOrUserName = (data) => __awaiter(void 0, void 0, void 0, function* () {
@@ -50,15 +50,20 @@ const findUserByEmailOrUserName = (data) => __awaiter(void 0, void 0, void 0, fu
 });
 exports.findUserByEmailOrUserName = findUserByEmailOrUserName;
 const insertUser = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    const user_id = (0, uuid_1.v4)();
+    const todo_id = (0, uuid_1.v4)();
+    const request_id = (0, uuid_1.v4)();
+    const chat_id = (0, uuid_1.v4)();
+    const friend_id = (0, uuid_1.v4)();
     const user = new models_1.userModel({
-        user_id: (0, uuid_1.v4)(),
+        user_id,
         name: data.name,
         user_name: data.user_name,
         email: data.email,
-        friend_id: (0, uuid_1.v4)(),
-        chat_id: (0, uuid_1.v4)(),
-        todo_id: (0, uuid_1.v4)(),
-        request_id: (0, uuid_1.v4)(),
+        friend_id,
+        chat_id,
+        todo_id,
+        request_id,
         theme: "orange",
         password: data.password,
         profile_url: data.profile_url,
@@ -73,4 +78,14 @@ const insertUser = (data) => __awaiter(void 0, void 0, void 0, function* () {
     return resp;
 });
 exports.insertUser = insertUser;
+const getAllUserData = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield models_1.userModel
+        .find({ user_id: id })
+        .then((result) => {
+        return { success: true, result };
+    })
+        .catch((err) => ({ err, success: false }));
+    return data;
+});
+exports.getAllUserData = getAllUserData;
 //# sourceMappingURL=db.helpers.js.map
