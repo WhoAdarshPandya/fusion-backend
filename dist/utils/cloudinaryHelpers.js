@@ -33,12 +33,9 @@ const uploadImage = (imageUrl) => __awaiter(void 0, void 0, void 0, function* ()
         folder: "profiles",
     }, (err, res) => {
         if (err) {
-            console.log(err);
             return { success: false, imageUrl: "" };
         }
         else {
-            console.log(res === null || res === void 0 ? void 0 : res.url);
-            console.log(res === null || res === void 0 ? void 0 : res.secure_url);
             return { success: false, imageUrl: res === null || res === void 0 ? void 0 : res.secure_url };
         }
     });

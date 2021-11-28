@@ -1,8 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllUserData = exports.findUserByEmailOrUserName = exports.insertUser = void 0;
+exports.deleteRequest = exports.deleteTodo = exports.deleteChat = exports.deleteFriend = exports.deleteUser = exports.getAllTodos = exports.getAllRequests = exports.getAllFriends = exports.getAllChats = exports.insertRequest = exports.insertChat = exports.insertFriend = exports.insertTodo = exports.insertUser = exports.getAllUserData = exports.findUserByEmailOrUserName = void 0;
 var db_helpers_1 = require("./db.helpers");
-Object.defineProperty(exports, "insertUser", { enumerable: true, get: function () { return db_helpers_1.insertUser; } });
 Object.defineProperty(exports, "findUserByEmailOrUserName", { enumerable: true, get: function () { return db_helpers_1.findUserByEmailOrUserName; } });
 Object.defineProperty(exports, "getAllUserData", { enumerable: true, get: function () { return db_helpers_1.getAllUserData; } });
+Object.defineProperty(exports, "insertUser", { enumerable: true, get: function () { return db_helpers_1.insertUser; } });
+Object.defineProperty(exports, "insertTodo", { enumerable: true, get: function () { return db_helpers_1.insertTodo; } });
+Object.defineProperty(exports, "insertFriend", { enumerable: true, get: function () { return db_helpers_1.insertFriend; } });
+Object.defineProperty(exports, "insertChat", { enumerable: true, get: function () { return db_helpers_1.insertChat; } });
+Object.defineProperty(exports, "insertRequest", { enumerable: true, get: function () { return db_helpers_1.insertRequest; } });
+Object.defineProperty(exports, "getAllChats", { enumerable: true, get: function () { return db_helpers_1.getAllChats; } });
+Object.defineProperty(exports, "getAllFriends", { enumerable: true, get: function () { return db_helpers_1.getAllFriends; } });
+Object.defineProperty(exports, "getAllRequests", { enumerable: true, get: function () { return db_helpers_1.getAllRequests; } });
+Object.defineProperty(exports, "getAllTodos", { enumerable: true, get: function () { return db_helpers_1.getAllTodos; } });
+Object.defineProperty(exports, "deleteUser", { enumerable: true, get: function () { return db_helpers_1.deleteUser; } });
+Object.defineProperty(exports, "deleteFriend", { enumerable: true, get: function () { return db_helpers_1.deleteFriend; } });
+Object.defineProperty(exports, "deleteChat", { enumerable: true, get: function () { return db_helpers_1.deleteChat; } });
+Object.defineProperty(exports, "deleteTodo", { enumerable: true, get: function () { return db_helpers_1.deleteTodo; } });
+Object.defineProperty(exports, "deleteRequest", { enumerable: true, get: function () { return db_helpers_1.deleteRequest; } });
 //# sourceMappingURL=index.js.map

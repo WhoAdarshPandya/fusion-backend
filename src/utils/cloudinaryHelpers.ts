@@ -25,11 +25,11 @@ export const uploadImage = async (
     },
     (err, res) => {
       if (err) {
-        console.log(err);
+        // console.log(err);
         return { success: false, imageUrl: "" };
       } else {
-        console.log(res?.url);
-        console.log(res?.secure_url);
+        // console.log(res?.url);
+        // console.log(res?.secure_url);
         return { success: false, imageUrl: res?.secure_url };
       }
     }

@@ -37,7 +37,7 @@ const loginHandler = (req, res) => __awaiter(void 0, void 0, void 0, function* (
                     const token = jsonwebtoken_1.default.sign({ user: userData.res[0] }, process.env.SECRET_TOKEN, {
                         expiresIn: "2h",
                     });
-                    return res.json({
+                    return res.cookie("token", token).json({
                         msg: "log in successful",
                         success: true,
                         token,

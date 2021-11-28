@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllUserData = exports.insertUser = exports.findUserByEmailOrUserName = void 0;
+exports.deleteRequest = exports.deleteTodo = exports.deleteChat = exports.deleteFriend = exports.deleteUser = exports.getAllChats = exports.getAllRequests = exports.getAllFriends = exports.getAllTodos = exports.getAllUserData = exports.insertChat = exports.insertRequest = exports.insertFriend = exports.insertTodo = exports.insertUser = exports.findUserByEmailOrUserName = void 0;
 const models_1 = require("../models");
 const uuid_1 = require("uuid");
 const findUserByEmailOrUserName = (data) => __awaiter(void 0, void 0, void 0, function* () {
@@ -75,12 +75,65 @@ const insertUser = (data) => __awaiter(void 0, void 0, void 0, function* () {
         .save()
         .then((res) => ({ msg: "inserted", success: true, res }))
         .catch((err) => ({ msg: "inserted", success: false, err }));
+    yield models_1.todoModel.insertMany([{ todo_id }]);
+    yield models_1.friendListModel.insertMany([{ friend_id }]);
+    yield models_1.requestsModel.insertMany([{ request_id }]);
+    yield models_1.chatModel.insertMany([{ chat_id }]);
     return resp;
 });
 exports.insertUser = insertUser;
+const insertTodo = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id, isStarred, title, description, date, time, color } = data;
+    const todo = { title, description, data, time, color, isStarred };
+    const resp = yield models_1.todoModel
+        .updateMany({ todo_id: id }, { $push: { todos: todo } })
+        .then((result) => ({ success: true, result }))
+        .catch((err) => ({ success: false, err }));
+    return resp;
+});
+exports.insertTodo = insertTodo;
+const insertFriend = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id, user_id, friendship_id, date, time } = data;
+    const friend = { id, user_id, friendship_id, date, time };
+    const resp = yield models_1.friendListModel
+        .updateMany({ friend_id: id }, { $push: { friends: friend } })
+        .then((result) => ({ success: true, result }))
+        .catch((err) => ({ success: false, err }));
+    return resp;
+});
+exports.insertFriend = insertFriend;
+const insertRequest = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id, req_id, req_for_id, date, time, username, user_profile } = data;
+    const request = { req_id, req_for_id, date, time, username, user_profile };
+    const resp = yield models_1.requestsModel
+        .updateMany({ request_id: id }, { $push: { requests: request } })
+        .then((result) => ({ success: true, result }))
+        .catch((err) => ({ success: false, err }));
+    return resp;
+});
+exports.insertRequest = insertRequest;
+const insertChat = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id, chat_id, msg, sender_id, receiver_id, friendship_id, date, time, } = data;
+    const chat = {
+        chat_id,
+        msg,
+        sender_id,
+        receiver_id,
+        friendship_id,
+        date,
+        time,
+    };
+    const resp = yield models_1.chatModel
+        .updateMany({ chat_id: id }, { $push: { chats: chat } })
+        .then((result) => ({ success: true, result }))
+        .catch((err) => ({ success: false, err }));
+    return resp;
+});
+exports.insertChat = insertChat;
 const getAllUserData = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const data = yield models_1.userModel
         .find({ user_id: id })
+        .lean()
         .then((result) => {
         return { success: true, result };
     })
@@ -88,4 +141,135 @@ const getAllUserData = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return data;
 });
 exports.getAllUserData = getAllUserData;
+const getAllTodos = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield models_1.todoModel
+        .find({ todo_id: id })
+        .lean()
+        .then((result) => {
+        return { success: true, result };
+    })
+        .catch((err) => ({ err, success: false }));
+    return data;
+});
+exports.getAllTodos = getAllTodos;
+const getAllFriends = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield models_1.friendListModel
+        .find({ friend_id: id })
+        .lean()
+        .then((result) => {
+        console.log(result);
+        return { success: true, result };
+    })
+        .catch((err) => ({ err, success: false }));
+    return data;
+});
+exports.getAllFriends = getAllFriends;
+const getAllRequests = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield models_1.requestsModel
+        .find({ request_id: id })
+        .lean()
+        .then((result) => {
+        return { success: true, result };
+    })
+        .catch((err) => ({ err, success: false }));
+    return data;
+});
+exports.getAllRequests = getAllRequests;
+const getAllChats = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield models_1.chatModel
+        .find({ chat_id: id })
+        .lean()
+        .then((result) => {
+        return { success: true, result };
+    })
+        .catch((err) => ({ err, success: false }));
+    return data;
+});
+exports.getAllChats = getAllChats;
+const deleteUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield models_1.userModel
+        .deleteOne({ user_id: id })
+        .then((result) => {
+        if (result.deletedCount > 0) {
+            console.log("deleted" + result.deletedCount);
+            return { success: true, count: result.deletedCount };
+        }
+        else {
+            return { success: true, msg: "not deleted" };
+        }
+    })
+        .catch((err) => ({ err, success: false }));
+    return data;
+});
+exports.deleteUser = deleteUser;
+const deleteFriend = (master_id, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield models_1.friendListModel
+        .updateOne({ friend_id: master_id }, { $pull: { friends: { _id: id } } }, { multi: false })
+        .lean()
+        .then((result) => {
+        if (result.nModified) {
+            console.log("updated" + result.nModified);
+            return { success: true, count: result.nModified };
+        }
+        else {
+            return { success: true, msg: "not updated" };
+        }
+    })
+        .catch((err) => ({ err, success: false }));
+    return data;
+});
+exports.deleteFriend = deleteFriend;
+const deleteChat = (master_id, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield models_1.chatModel
+        .updateOne({ chat_id: master_id }, { $pull: { chats: { _id: id } } }, { multi: false })
+        .lean()
+        .then((result) => {
+        if (result.nModified) {
+            console.log("updated chat: " + result.nModified);
+            return { success: true, count: result.nModified };
+        }
+        else {
+            return { success: true, msg: "not updated chat" };
+        }
+    })
+        .catch((err) => ({ err, success: false }));
+    return data;
+});
+exports.deleteChat = deleteChat;
+const deleteTodo = (todo_master_id, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield models_1.todoModel
+        .updateOne({ todo_id: todo_master_id }, { $pull: { todos: { _id: id } } }, { multi: false })
+        .lean()
+        .then((result) => {
+        if (result.nModified) {
+            console.log("updated todo: " + result.nModified);
+            return { success: true, count: result.nModified };
+        }
+        else {
+            console.log(result.nModified);
+            return { success: true, msg: "not updated todo" };
+        }
+    })
+        .catch((err) => ({ err, success: false }));
+    return data;
+});
+exports.deleteTodo = deleteTodo;
+const deleteRequest = (request_master_id, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield models_1.requestsModel
+        .updateOne({ request_id: request_master_id }, { $pull: { requests: { _id: id } } }, { multi: false })
+        .lean()
+        .then((result) => {
+        if (result.nModified) {
+            console.log("updated todo: " + result.nModified);
+            return { success: true, count: result.nModified };
+        }
+        else {
+            console.log(result.nModified);
+            return { success: true, msg: "not updated request" };
+        }
+    })
+        .catch((err) => ({ err, success: false }));
+    return data;
+});
+exports.deleteRequest = deleteRequest;
 //# sourceMappingURL=db.helpers.js.map

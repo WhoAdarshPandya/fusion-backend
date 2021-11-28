@@ -31,7 +31,7 @@ export const loginHandler: RequestHandler = async (
               expiresIn: "2h",
             }
           );
-          return res.json({
+          return res.cookie("token", token).json({
             msg: "log in successful",
             success: true,
             token,

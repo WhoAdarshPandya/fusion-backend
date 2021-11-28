@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userController = void 0;
+exports.deleteUserController = exports.userController = void 0;
 const db_1 = require("./../db/");
 const userController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
@@ -18,4 +18,11 @@ const userController = (req, res) => __awaiter(void 0, void 0, void 0, function*
     res.json({ data });
 });
 exports.userController = userController;
+const deleteUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const data = yield (0, db_1.deleteUser)(id);
+    console.log(data);
+    res.json({ data });
+});
+exports.deleteUserController = deleteUserController;
 //# sourceMappingURL=user.controller.js.map
