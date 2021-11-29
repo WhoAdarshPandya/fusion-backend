@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteRequest = exports.deleteTodo = exports.deleteChat = exports.deleteFriend = exports.deleteUser = exports.getAllTodos = exports.getAllRequests = exports.getAllFriends = exports.getAllChats = exports.insertRequest = exports.insertChat = exports.insertFriend = exports.insertTodo = exports.insertUser = exports.getAllUserData = exports.findUserByEmailOrUserName = void 0;
+exports.updateUserProfile = exports.updateUserNotification = exports.updateUserInfo = exports.updateUserDND = exports.updatePassword = exports.updateTodo = exports.deleteRequest = exports.deleteTodo = exports.deleteChat = exports.deleteFriend = exports.deleteUser = exports.getAllTodos = exports.getAllRequests = exports.getAllFriends = exports.getAllChats = exports.insertRequest = exports.insertChat = exports.insertFriend = exports.insertTodo = exports.insertUser = exports.getAllUserData = exports.findUserByEmailOrUserName = void 0;
 var db_helpers_1 = require("./db.helpers");
 Object.defineProperty(exports, "findUserByEmailOrUserName", { enumerable: true, get: function () { return db_helpers_1.findUserByEmailOrUserName; } });
 Object.defineProperty(exports, "getAllUserData", { enumerable: true, get: function () { return db_helpers_1.getAllUserData; } });
@@ -18,4 +18,10 @@ Object.defineProperty(exports, "deleteFriend", { enumerable: true, get: function
 Object.defineProperty(exports, "deleteChat", { enumerable: true, get: function () { return db_helpers_1.deleteChat; } });
 Object.defineProperty(exports, "deleteTodo", { enumerable: true, get: function () { return db_helpers_1.deleteTodo; } });
 Object.defineProperty(exports, "deleteRequest", { enumerable: true, get: function () { return db_helpers_1.deleteRequest; } });
+Object.defineProperty(exports, "updateTodo", { enumerable: true, get: function () { return db_helpers_1.updateTodo; } });
+Object.defineProperty(exports, "updatePassword", { enumerable: true, get: function () { return db_helpers_1.updatePassword; } });
+Object.defineProperty(exports, "updateUserDND", { enumerable: true, get: function () { return db_helpers_1.updateUserDND; } });
+Object.defineProperty(exports, "updateUserInfo", { enumerable: true, get: function () { return db_helpers_1.updateUserInfo; } });
+Object.defineProperty(exports, "updateUserNotification", { enumerable: true, get: function () { return db_helpers_1.updateUserNotification; } });
+Object.defineProperty(exports, "updateUserProfile", { enumerable: true, get: function () { return db_helpers_1.updateUserProfile; } });
 //# sourceMappingURL=index.js.map

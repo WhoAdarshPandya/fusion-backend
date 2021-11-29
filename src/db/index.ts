@@ -15,4 +15,10 @@ export {
   deleteChat,
   deleteTodo,
   deleteRequest,
+  updateTodo,
+  updatePassword,
+  updateUserDND,
+  updateUserInfo,
+  updateUserNotification,
+  updateUserProfile,
 } from "./db.helpers";

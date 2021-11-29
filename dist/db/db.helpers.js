@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteRequest = exports.deleteTodo = exports.deleteChat = exports.deleteFriend = exports.deleteUser = exports.getAllChats = exports.getAllRequests = exports.getAllFriends = exports.getAllTodos = exports.getAllUserData = exports.insertChat = exports.insertRequest = exports.insertFriend = exports.insertTodo = exports.insertUser = exports.findUserByEmailOrUserName = void 0;
+exports.updatePassword = exports.updateUserDND = exports.updateUserNotification = exports.updateUserProfile = exports.updateUserInfo = exports.updateTodo = exports.deleteRequest = exports.deleteTodo = exports.deleteChat = exports.deleteFriend = exports.deleteUser = exports.getAllChats = exports.getAllRequests = exports.getAllFriends = exports.getAllTodos = exports.getAllUserData = exports.insertChat = exports.insertRequest = exports.insertFriend = exports.insertTodo = exports.insertUser = exports.findUserByEmailOrUserName = void 0;
 const models_1 = require("../models");
 const uuid_1 = require("uuid");
 const findUserByEmailOrUserName = (data) => __awaiter(void 0, void 0, void 0, function* () {
@@ -272,4 +272,116 @@ const deleteRequest = (request_master_id, id) => __awaiter(void 0, void 0, void 
     return data;
 });
 exports.deleteRequest = deleteRequest;
+const updateTodo = (todo_id, id, title, description, color, isStarred, time) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield models_1.todoModel
+        .updateOne({ todo_id: todo_id, "todos._id": id }, {
+        $set: {
+            "todos.$._id": id,
+            "todos.$.title": title,
+            "todos.$.description": description,
+            "todos.$.color": color,
+            "todos.$.time": time,
+            "todos.$.isStarred": isStarred,
+        },
+    })
+        .lean()
+        .then((result) => {
+        if (result.nModified) {
+            console.log("updated todo: " + result.nModified);
+            return { success: true, count: result.nModified };
+        }
+        else {
+            console.log(result.nModified);
+            return { success: true, msg: "not updated todo" };
+        }
+    })
+        .catch((err) => ({ success: false, err }));
+    return data;
+});
+exports.updateTodo = updateTodo;
+const updateUserInfo = (id, name, user_name, theme, email) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield models_1.userModel
+        .updateOne({ user_id: id }, { $set: { name: name, user_name: user_name, theme: theme, email: email } })
+        .lean()
+        .then((result) => {
+        if (result.nModified) {
+            console.log("updated user info: " + result.nModified);
+            return { success: true, count: result.nModified };
+        }
+        else {
+            console.log(result.nModified);
+            return { success: true, msg: "not updated user info" };
+        }
+    });
+    return data;
+});
+exports.updateUserInfo = updateUserInfo;
+const updateUserProfile = (id, url) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield models_1.userModel
+        .updateOne({ user_id: id }, { $set: { profile_url: url } })
+        .lean()
+        .then((result) => {
+        if (result.nModified) {
+            console.log("updated image: " + result.nModified);
+            return { success: true, count: result.nModified };
+        }
+        else {
+            console.log(result.nModified);
+            return { success: true, msg: "not updated image" };
+        }
+    });
+    return data;
+});
+exports.updateUserProfile = updateUserProfile;
+const updateUserNotification = (id, notification) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield models_1.userModel
+        .updateOne({ user_id: id }, { $set: { notification: notification } })
+        .lean()
+        .then((result) => {
+        if (result.nModified) {
+            console.log("updated notification: " + result.nModified);
+            return { success: true, count: result.nModified };
+        }
+        else {
+            console.log(result.nModified);
+            return { success: true, msg: "not updated notification" };
+        }
+    });
+    return data;
+});
+exports.updateUserNotification = updateUserNotification;
+const updateUserDND = (id, DND) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield models_1.userModel
+        .updateOne({ user_id: id }, { $set: { dnd: DND } })
+        .lean()
+        .then((result) => {
+        if (result.nModified) {
+            console.log("updated dnd: " + result.nModified);
+            return { success: true, count: result.nModified };
+        }
+        else {
+            console.log(result.nModified);
+            return { success: true, msg: "not updated dnd" };
+        }
+    });
+    return data;
+});
+exports.updateUserDND = updateUserDND;
+const updatePassword = (id, newPass) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield models_1.userModel
+        .updateOne({ user_id: id }, { $set: { password: newPass } })
+        .lean()
+        .then((result) => {
+        if (result.nModified) {
+            console.log("updated password: " + result.nModified);
+            return { success: true, count: result.nModified };
+        }
+        else {
+            console.log(result.nModified);
+            return { success: true, msg: "not updated password" };
+        }
+    });
+    return data;
+});
+exports.updatePassword = updatePassword;
 //# sourceMappingURL=db.helpers.js.map

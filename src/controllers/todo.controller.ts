@@ -1,4 +1,4 @@
-import { insertTodo, getAllTodos, deleteTodo } from "../db/";
+import { insertTodo, getAllTodos, deleteTodo, updateTodo } from "../db/";
 import { RequestHandler, Request, Response } from "express";
 
 export const deleteTodoController: RequestHandler = async (
@@ -37,6 +37,16 @@ export const addTodoController: RequestHandler = async (
     time: "asd",
     title: "atyachar",
   });
+  console.log(data);
+  return res.json({ data });
+};
+
+export const updateTodoController: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  const { todo_id, id, title } = req.body;
+  const data = await updateTodo(todo_id, id, title, "bc", "cc", false, "time");
   console.log(data);
   return res.json({ data });
 };

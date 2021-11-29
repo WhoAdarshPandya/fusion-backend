@@ -3,6 +3,7 @@ import {
   getTodosController,
   addTodoController,
   deleteTodoController,
+  updateTodoController,
 } from "../controllers";
 
 export const todoRouter = Router();
@@ -14,4 +15,4 @@ todoRouter.post("/addtodo", addTodoController);
 todoRouter.get("/deletetodo/:todo_master_id/:todo_id", deleteTodoController);
 
 //pending
-// todoRouter.post("/updatetodo", userController);
+todoRouter.post("/updatetodo", updateTodoController);

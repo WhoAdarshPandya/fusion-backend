@@ -325,3 +325,132 @@ export const deleteRequest = async (request_master_id: string, id: string) => {
     .catch((err) => ({ err, success: false }));
   return data;
 };
+
+export const updateTodo = async (
+  todo_id: string,
+  id: string,
+  title: string,
+  description: string,
+  color: string,
+  isStarred: boolean,
+  time: string
+) => {
+  const data = await todoModel
+    .updateOne(
+      { todo_id: todo_id, "todos._id": id },
+      {
+        $set: {
+          "todos.$._id": id,
+          "todos.$.title": title,
+          "todos.$.description": description,
+          "todos.$.color": color,
+          "todos.$.time": time,
+          "todos.$.isStarred": isStarred,
+        },
+      }
+    )
+    .lean()
+    .then((result) => {
+      if (result.nModified) {
+        console.log("updated todo: " + result.nModified);
+        return { success: true, count: result.nModified };
+      } else {
+        console.log(result.nModified);
+        return { success: true, msg: "not updated todo" };
+      }
+    })
+    .catch((err) => ({ success: false, err }));
+  return data;
+};
+
+export const updateUserInfo = async (
+  id: string,
+  name: string,
+  user_name: string,
+  theme: string,
+  email: string
+) => {
+  const data = await userModel
+    .updateOne(
+      { user_id: id },
+      { $set: { name: name, user_name: user_name, theme: theme, email: email } }
+    )
+    .lean()
+    .then((result) => {
+      if (result.nModified) {
+        console.log("updated user info: " + result.nModified);
+        return { success: true, count: result.nModified };
+      } else {
+        console.log(result.nModified);
+        return { success: true, msg: "not updated user info" };
+      }
+    });
+  return data;
+};
+
+export const updateUserProfile = async (id: string, url: string) => {
+  const data = await userModel
+    .updateOne({ user_id: id }, { $set: { profile_url: url } })
+    .lean()
+    .then((result) => {
+      if (result.nModified) {
+        console.log("updated image: " + result.nModified);
+        return { success: true, count: result.nModified };
+      } else {
+        console.log(result.nModified);
+        return { success: true, msg: "not updated image" };
+      }
+    });
+  return data;
+};
+
+export const updateUserNotification = async (
+  id: string,
+  notification: boolean
+) => {
+  const data = await userModel
+    .updateOne({ user_id: id }, { $set: { notification: notification } })
+    .lean()
+    .then((result) => {
+      if (result.nModified) {
+        console.log("updated notification: " + result.nModified);
+        return { success: true, count: result.nModified };
+      } else {
+        console.log(result.nModified);
+        return { success: true, msg: "not updated notification" };
+      }
+    });
+  return data;
+};
+
+export const updateUserDND = async (id: string, DND: boolean) => {
+  const data = await userModel
+    .updateOne({ user_id: id }, { $set: { dnd: DND } })
+    .lean()
+    .then((result) => {
+      if (result.nModified) {
+        console.log("updated dnd: " + result.nModified);
+        return { success: true, count: result.nModified };
+      } else {
+        console.log(result.nModified);
+        return { success: true, msg: "not updated dnd" };
+      }
+    });
+  return data;
+};
+
+export const updatePassword = async (id: string, newPass: string) => {
+  const data = await userModel
+    .updateOne({ user_id: id }, { $set: { password: newPass } })
+    .lean()
+    .then((result) => {
+      if (result.nModified) {
+        console.log("updated password: " + result.nModified);
+        return { success: true, count: result.nModified };
+      } else {
+        console.log(result.nModified);
+        return { success: true, msg: "not updated password" };
+      }
+    });
+  return data;
+};

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addTodoController = exports.getTodosController = exports.deleteTodoController = void 0;
+exports.updateTodoController = exports.addTodoController = exports.getTodosController = exports.deleteTodoController = void 0;
 const db_1 = require("../db/");
 const deleteTodoController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { todo_master_id, todo_id } = req.params;
@@ -42,4 +42,11 @@ const addTodoController = (req, res) => __awaiter(void 0, void 0, void 0, functi
     return res.json({ data });
 });
 exports.addTodoController = addTodoController;
+const updateTodoController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { todo_id, id, title } = req.body;
+    const data = yield (0, db_1.updateTodo)(todo_id, id, title, "bc", "cc", false, "time");
+    console.log(data);
+    return res.json({ data });
+});
+exports.updateTodoController = updateTodoController;
 //# sourceMappingURL=todo.controller.js.map

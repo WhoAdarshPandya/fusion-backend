@@ -1,6 +1,14 @@
 export { loginHandler } from "./login.controller";
 export { signUpHandler } from "./signup.controller";
-export { userController, deleteUserController } from "./user.controller";
+export {
+  userController,
+  deleteUserController,
+  updateUserPasswordController,
+  updateUserDndController,
+  updateUserInfoController,
+  updateUserNotificationController,
+  updateUserProfileController,
+} from "./user.controller";
 export {
   deleteFriendController,
   getFriendsController,
@@ -15,6 +23,7 @@ export {
   addTodoController,
   deleteTodoController,
   getTodosController,
+  updateTodoController,
 } from "./todo.controller";
 export {
   addRequestController,

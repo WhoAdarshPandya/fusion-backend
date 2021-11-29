@@ -16,12 +16,9 @@ import {
   requestRouter,
 } from "./routes";
 import { verifyToken } from "./middleware";
-// import { v4 } from "uuid";
 import { insertFriend } from "./db/db.helpers";
-// import fs from "fs";
 import expressFileUpload, { UploadedFile } from "express-fileupload";
 import fs from "fs";
-// import { UploadedFile } from "express-fileupload";
 
 /*
  * अपनी रचनाओं में वो ज़िंदा है
@@ -47,6 +44,8 @@ initCloudinary();
 io.on("connection", (socket: Socket) => {
   // console.log(socket);
 });
+
+// ?Routes
 // all verified
 app.get("/", (req: Request, res: Response) => {
   res.json({ msg: "hi from fusion api" });
@@ -54,10 +53,10 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/api/v1/login", loginRouter);
 app.use("/api/v1/signup", signUpRouter);
-// verified insert/get/delete (update pending)
+// verified insert/get/delete/update password/notificaiton/dnd/profile/info
 app.use("/api/v1/user", verifyToken, userRouter);
 
-// verified insert/get/delete (update pending)
+// verified insert/get/delete/update
 app.use("/api/v1/todos", verifyToken, todoRouter);
 
 // verified get and delete and insert
