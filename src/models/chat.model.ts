@@ -13,6 +13,7 @@ const ChatSchema: Schema<Chat> = new Schema<Chat>({
         friendship_id: String,
         date: String,
         time: String,
+        isSeen: Boolean
       },
     ],
     required: true,

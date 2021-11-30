@@ -106,6 +106,14 @@ app.post("/api/v1/uploadimage", async (req, res) => {
   });
 });
 
+// 404
+app.get("*", (req, res) => {
+  return res.json({
+    msg: "Seems like we're always thinking of ourselves when looking for something that's lost, but we never think much about the lost, whatever, whoever is unable to be found, whether it's a set of keys left somewhere and forgotten, a couple of guys wandering aimlessly in the woods, or someone who's disappeared inside himself. What if that's what they wanted all along? Not to be found.",
+    success: false,
+  });
+});
+
 server.listen(PORT, () => {
   console.log(`app is running on port ${PORT}`);
 });

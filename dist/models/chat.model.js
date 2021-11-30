@@ -14,6 +14,7 @@ const ChatSchema = new mongoose_1.Schema({
                 friendship_id: String,
                 date: String,
                 time: String,
+                isSeen: Boolean
             },
         ],
         required: true,

@@ -6,6 +6,7 @@ export interface IChat {
   friendship_id: String;
   date: String;
   time: String;
+  isSeen: boolean;
 }
 
 export interface Chat {
