@@ -27,15 +27,15 @@ export const addTodoController: RequestHandler = async (
   req: Request,
   res: Response
 ) => {
-  const { id } = req.body;
+  const { id, color, title, description, isStarred, time, date } = req.body;
   const data = await insertTodo({
     id,
-    color: "a",
-    date: "asd",
-    description: "sdf",
-    isStarred: false,
-    time: "asd",
-    title: "atyachar",
+    color,
+    date,
+    description,
+    isStarred,
+    time,
+    title,
   });
   console.log(data);
   return res.json({ data });
@@ -45,8 +45,16 @@ export const updateTodoController: RequestHandler = async (
   req: Request,
   res: Response
 ) => {
-  const { todo_id, id, title } = req.body;
-  const data = await updateTodo(todo_id, id, title, "bc", "cc", false, "time");
+  const { todo_id, id, title, color, description, isStarred, time } = req.body;
+  const data = await updateTodo(
+    todo_id,
+    id,
+    title,
+    description,
+    color,
+    isStarred,
+    time
+  );
   console.log(data);
   return res.json({ data });
 };

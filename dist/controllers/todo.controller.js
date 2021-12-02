@@ -28,23 +28,23 @@ const getTodosController = (req, res) => __awaiter(void 0, void 0, void 0, funct
 });
 exports.getTodosController = getTodosController;
 const addTodoController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.body;
+    const { id, color, title, description, isStarred, time, date } = req.body;
     const data = yield (0, db_1.insertTodo)({
         id,
-        color: "a",
-        date: "asd",
-        description: "sdf",
-        isStarred: false,
-        time: "asd",
-        title: "atyachar",
+        color,
+        date,
+        description,
+        isStarred,
+        time,
+        title,
     });
     console.log(data);
     return res.json({ data });
 });
 exports.addTodoController = addTodoController;
 const updateTodoController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { todo_id, id, title } = req.body;
-    const data = yield (0, db_1.updateTodo)(todo_id, id, title, "bc", "cc", false, "time");
+    const { todo_id, id, title, color, description, isStarred, time } = req.body;
+    const data = yield (0, db_1.updateTodo)(todo_id, id, title, description, color, isStarred, time);
     console.log(data);
     return res.json({ data });
 });

@@ -84,7 +84,7 @@ const insertUser = (data) => __awaiter(void 0, void 0, void 0, function* () {
 exports.insertUser = insertUser;
 const insertTodo = (data) => __awaiter(void 0, void 0, void 0, function* () {
     const { id, isStarred, title, description, date, time, color } = data;
-    const todo = { title, description, data, time, color, isStarred };
+    const todo = { title, description, date, time, color, isStarred };
     const resp = yield models_1.todoModel
         .updateMany({ todo_id: id }, { $push: { todos: todo } })
         .then((result) => ({ success: true, result }))

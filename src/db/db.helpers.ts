@@ -95,7 +95,7 @@ export const insertTodo = async (data: {
   color: string;
 }) => {
   const { id, isStarred, title, description, date, time, color } = data;
-  const todo = { title, description, data, time, color, isStarred };
+  const todo = { title, description, date, time, color, isStarred };
   const resp = await todoModel
     .updateMany({ todo_id: id }, { $push: { todos: todo } })
     .then((result) => ({ success: true, result }))
