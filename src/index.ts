@@ -84,7 +84,7 @@ app.post("/api/v1/uploadimage", async (req, res) => {
     if (err) {
       return res.status(200).json({ message: "server error", success: false });
     } else {
-      await uploadImage(`./src/assets/${ImageUrl}`)
+      await uploadImage(`${__dirname}/src/assets/${ImageUrl}`)
         .then((result) => {
           console.log(result);
           fs.rm(`${__dirname}/assets/${ImageUrl}`, (err) => {
