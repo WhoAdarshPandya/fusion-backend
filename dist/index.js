@@ -57,15 +57,15 @@ app.post("/api/v1/uploadimage", (req, res) => __awaiter(void 0, void 0, void 0, 
     }
     const file = req.files.ProfileImage;
     const ImageUrl = `IMG_${Date.now()}_${file.name}`;
-    file.mv(`${__dirname}/assets/${ImageUrl}`, (err) => __awaiter(void 0, void 0, void 0, function* () {
+    file.mv(`${__dirname}/src/assets/${ImageUrl}`, (err) => __awaiter(void 0, void 0, void 0, function* () {
         if (err) {
             return res.status(200).json({ message: "server error", success: false });
         }
         else {
-            yield (0, utils_1.uploadImage)(`./src/assets/${ImageUrl}`)
+            yield (0, utils_1.uploadImage)(`${__dirname}/src/assets/${ImageUrl}`)
                 .then((result) => {
                 console.log(result);
-                fs_1.default.rm(`${__dirname}/assets/${ImageUrl}`, (err) => {
+                fs_1.default.rm(`${__dirname}/src/assets/${ImageUrl}`, (err) => {
                     console.log(err);
                 });
                 return res.json({
