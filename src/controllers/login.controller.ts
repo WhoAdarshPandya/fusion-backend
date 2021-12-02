@@ -12,7 +12,7 @@ export const loginHandler: RequestHandler = async (
   res: Response
 ) => {
   const { error } = loginValidator(req.body);
-  if (error) return res.status(400).json({ message: error.details[0].message });
+  if (error) return res.status(200).json({ msg: error.details[0].message });
   const { type, password } = req.body;
   if (type === "email") {
     const userData = await findUserByEmailOrUserName({

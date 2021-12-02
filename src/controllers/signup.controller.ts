@@ -10,7 +10,10 @@ export const signUpHandler: RequestHandler = async (
   res: Response
 ) => {
   const { error } = signUpValidator(req.body);
-  if (error) return res.status(400).json({ message: error.details[0].message });
+  if (error)
+    return res
+      .status(200)
+      .json({ msg: error.details[0].message, success: false });
   const { name, user_name, profile_url, password, email } = req.body;
   const data = await findUserByEmailOrUserName({
     type: "both",
@@ -24,13 +27,13 @@ export const signUpHandler: RequestHandler = async (
       email,
       password: hashedPwd,
       profile_url,
-      joined_at: "joined_at",
+      joined_at: String(Date.now()),
     });
     if (userData && userData.success) {
       res.status(200).json({ msg: "user signed up", success: true });
     } else {
       console.log(userData);
-      res.status(400).json({ msg: "something went wrong", success: false });
+      res.status(200).json({ msg: "something went wrong", success: false });
     }
   } else {
     res.json({

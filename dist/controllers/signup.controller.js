@@ -17,7 +17,9 @@ let saltRounds = 10;
 const signUpHandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { error } = (0, utils_1.signUpValidator)(req.body);
     if (error)
-        return res.status(400).json({ message: error.details[0].message });
+        return res
+            .status(200)
+            .json({ msg: error.details[0].message, success: false });
     const { name, user_name, profile_url, password, email } = req.body;
     const data = yield (0, db_1.findUserByEmailOrUserName)({
         type: "both",
@@ -31,14 +33,14 @@ const signUpHandler = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             email,
             password: hashedPwd,
             profile_url,
-            joined_at: "joined_at",
+            joined_at: String(Date.now()),
         });
         if (userData && userData.success) {
             res.status(200).json({ msg: "user signed up", success: true });
         }
         else {
             console.log(userData);
-            res.status(400).json({ msg: "something went wrong", success: false });
+            res.status(200).json({ msg: "something went wrong", success: false });
         }
     }
     else {

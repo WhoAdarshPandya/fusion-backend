@@ -27,8 +27,8 @@ export const signUpValidator = (data: any) => {
     name: joi.string().required(),
     user_name: joi.string().required().min(6).max(15).token().lowercase(),
     email: joi.string().lowercase().min(9).max(30).email().required(),
-    password: joi.string().required(),
-    confirm_password: joi.string().required(),
+    password: joi.string().required().min(6).max(30),
+    confirm_password: joi.string().required().min(6).max(30),
     profile_url: joi.string().required(),
   });
   return checkSchema.validate(data);

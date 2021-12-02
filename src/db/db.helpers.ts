@@ -71,7 +71,7 @@ export const insertUser = async (data: {
     profile_url: data.profile_url,
     joined_at: data.joined_at,
     dnd: false,
-    notification: true,
+    notification: false,
   });
   const resp = await user
     .save()

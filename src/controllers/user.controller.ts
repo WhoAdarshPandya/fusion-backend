@@ -6,8 +6,10 @@ import {
   updateUserDND,
   updateUserInfo,
   updateUserProfile,
+  findUserByEmailOrUserName,
 } from "./../db/";
 import { Request, Response, RequestHandler } from "express";
+import { compareSync, hashSync } from "bcrypt";
 
 export const userController: RequestHandler = async (
   req: Request,
@@ -33,10 +35,27 @@ export const updateUserPasswordController: RequestHandler = async (
   req: Request,
   res: Response
 ) => {
-  const { id, password } = req.body;
-  const data = await updatePassword(id, password);
-  console.log(data);
-  return res.json({ data });
+  const { id, email, old_pass, new_pass } = req.body;
+  const datata = await findUserByEmailOrUserName({
+    type: "email",
+    value: email,
+  });
+  if (datata.success && datata.count > 0) {
+    const db_pass = datata.res[0].password;
+    const db_decrypted_pass = compareSync(old_pass, db_pass);
+    if (db_decrypted_pass) {
+      let new_pass_enc = hashSync(new_pass, 10);
+      const data = await updatePassword(id, new_pass_enc);
+      return res.json({ data });
+    } else {
+      return res.json({ success: false, msg: "password not updated" });
+    }
+  } else {
+    return res.json({ success: false, msg: "no user found" });
+  }
+  // const data = await updatePassword(id, password);
+  // console.log(data);
+  // return res.json({ datata });
 };
 
 export const updateUserNotificationController: RequestHandler = async (

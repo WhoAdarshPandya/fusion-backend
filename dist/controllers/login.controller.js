@@ -22,7 +22,7 @@ const dotenv_1 = require("dotenv");
 const loginHandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { error } = (0, utils_1.loginValidator)(req.body);
     if (error)
-        return res.status(400).json({ message: error.details[0].message });
+        return res.status(200).json({ msg: error.details[0].message });
     const { type, password } = req.body;
     if (type === "email") {
         const userData = yield (0, db_1.findUserByEmailOrUserName)({

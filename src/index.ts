@@ -76,9 +76,7 @@ app.get("/api/private", verifyToken, (req, res) => {
 // verified
 app.post("/api/v1/uploadimage", async (req, res) => {
   if (req.files === null || req.files === undefined) {
-    return res
-      .status(200)
-      .json({ message: "no image provided", success: false });
+    return res.status(200).json({ msg: "no image provided", success: false });
   }
   const file = req.files!.ProfileImage as UploadedFile;
   const ImageUrl = `IMG_${Date.now()}_${file.name}`;

@@ -53,9 +53,7 @@ app.get("/api/private", middleware_1.verifyToken, (req, res) => {
 });
 app.post("/api/v1/uploadimage", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (req.files === null || req.files === undefined) {
-        return res
-            .status(200)
-            .json({ message: "no image provided", success: false });
+        return res.status(200).json({ msg: "no image provided", success: false });
     }
     const file = req.files.ProfileImage;
     const ImageUrl = `IMG_${Date.now()}_${file.name}`;

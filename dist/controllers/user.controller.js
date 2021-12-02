@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateUserInfoController = exports.updateUserProfileController = exports.updateUserDndController = exports.updateUserNotificationController = exports.updateUserPasswordController = exports.deleteUserController = exports.userController = void 0;
 const db_1 = require("./../db/");
+const bcrypt_1 = require("bcrypt");
 const userController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const data = yield (0, db_1.getAllUserData)(id);
@@ -26,10 +27,26 @@ const deleteUserController = (req, res) => __awaiter(void 0, void 0, void 0, fun
 });
 exports.deleteUserController = deleteUserController;
 const updateUserPasswordController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id, password } = req.body;
-    const data = yield (0, db_1.updatePassword)(id, password);
-    console.log(data);
-    return res.json({ data });
+    const { id, email, old_pass, new_pass } = req.body;
+    const datata = yield (0, db_1.findUserByEmailOrUserName)({
+        type: "email",
+        value: email,
+    });
+    if (datata.success && datata.count > 0) {
+        const db_pass = datata.res[0].password;
+        const db_decrypted_pass = (0, bcrypt_1.compareSync)(old_pass, db_pass);
+        if (db_decrypted_pass) {
+            let new_pass_enc = (0, bcrypt_1.hashSync)(new_pass, 10);
+            const data = yield (0, db_1.updatePassword)(id, new_pass_enc);
+            return res.json({ data });
+        }
+        else {
+            return res.json({ success: false, msg: "password not updated" });
+        }
+    }
+    else {
+        return res.json({ success: false, msg: "no user found" });
+    }
 });
 exports.updateUserPasswordController = updateUserPasswordController;
 const updateUserNotificationController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

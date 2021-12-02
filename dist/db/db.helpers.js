@@ -69,7 +69,7 @@ const insertUser = (data) => __awaiter(void 0, void 0, void 0, function* () {
         profile_url: data.profile_url,
         joined_at: data.joined_at,
         dnd: false,
-        notification: true,
+        notification: false,
     });
     const resp = yield user
         .save()
