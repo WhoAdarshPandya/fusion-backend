@@ -80,14 +80,14 @@ app.post("/api/v1/uploadimage", async (req, res) => {
   }
   const file = req.files!.ProfileImage as UploadedFile;
   const ImageUrl = `IMG_${Date.now()}_${file.name}`;
-  file.mv(`${__dirname}/assets/${ImageUrl}`, async (err) => {
+  file.mv(`${__dirname}/src/assets/${ImageUrl}`, async (err) => {
     if (err) {
       return res.status(200).json({ message: "server error", success: false });
     } else {
       await uploadImage(`${__dirname}/src/assets/${ImageUrl}`)
         .then((result) => {
           console.log(result);
-          fs.rm(`${__dirname}/assets/${ImageUrl}`, (err) => {
+          fs.rm(`${__dirname}/src/assets/${ImageUrl}`, (err) => {
             console.log(err);
           });
           return res.json({
