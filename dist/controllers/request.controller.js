@@ -27,15 +27,17 @@ const getRequestsController = (req, res) => __awaiter(void 0, void 0, void 0, fu
 });
 exports.getRequestsController = getRequestsController;
 const addRequestController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.body;
+    const { id, name, req_by_id, req_for_id, req_id, username, user_profile } = req.body;
     const data = yield (0, db_1.insertRequest)({
         id,
         date: "a",
-        req_for_id: "bb",
-        req_id: "030",
+        req_for_id,
+        req_id,
         time: "jh",
-        user_profile: "sadf",
-        username: "saran",
+        user_profile,
+        username,
+        name,
+        req_by_id,
     });
     console.log(data);
     return res.json({ data });

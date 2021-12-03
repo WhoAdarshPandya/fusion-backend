@@ -6,6 +6,9 @@ export interface FriendList {
       friendship_id: String;
       date: String;
       time: String;
+      name: string;
+      user_name: string;
+      user_profile: string;
     }
   ];
 }

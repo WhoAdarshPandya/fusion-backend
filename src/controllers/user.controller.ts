@@ -1,5 +1,6 @@
 import {
   getAllUserData,
+  getAllUsers,
   deleteUser,
   updatePassword,
   updateUserNotification,
@@ -17,7 +18,17 @@ export const userController: RequestHandler = async (
 ) => {
   const { id } = req.params;
   const data = await getAllUserData(id);
-  console.log(data);
+  // console.log(data);
+  return res.json({ data });
+};
+
+export const getAllUserController: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  const { id } = req.params;
+  const data = await getAllUsers();
+  // console.log(data);
   return res.json({ data });
 };
 

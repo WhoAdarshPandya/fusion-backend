@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatePassword = exports.updateUserDND = exports.updateUserNotification = exports.updateUserProfile = exports.updateUserInfo = exports.updateTodo = exports.deleteRequest = exports.deleteTodo = exports.deleteChat = exports.deleteFriend = exports.deleteUser = exports.getAllChats = exports.getAllRequests = exports.getAllFriends = exports.getAllTodos = exports.getAllUserData = exports.insertChat = exports.insertRequest = exports.insertFriend = exports.insertTodo = exports.insertUser = exports.findUserByEmailOrUserName = void 0;
+exports.updatePassword = exports.updateUserDND = exports.updateUserNotification = exports.updateUserProfile = exports.updateUserInfo = exports.updateTodo = exports.deleteRequest = exports.deleteTodo = exports.deleteChat = exports.deleteFriend = exports.deleteUser = exports.getAllChats = exports.getAllRequests = exports.getAllFriends = exports.getAllTodos = exports.getAllUsers = exports.getAllUserData = exports.insertChat = exports.insertRequest = exports.insertFriend = exports.insertTodo = exports.insertUser = exports.findUserByEmailOrUserName = void 0;
 const models_1 = require("../models");
 const uuid_1 = require("uuid");
 const findUserByEmailOrUserName = (data) => __awaiter(void 0, void 0, void 0, function* () {
@@ -93,8 +93,17 @@ const insertTodo = (data) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.insertTodo = insertTodo;
 const insertFriend = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id, user_id, friendship_id, date, time } = data;
-    const friend = { id, user_id, friendship_id, date, time };
+    const { id, user_id, friendship_id, date, time, name, user_name, user_profile, } = data;
+    const friend = {
+        id,
+        user_id,
+        friendship_id,
+        date,
+        time,
+        name,
+        user_name,
+        user_profile,
+    };
     const resp = yield models_1.friendListModel
         .updateMany({ friend_id: id }, { $push: { friends: friend } })
         .then((result) => ({ success: true, result }))
@@ -103,8 +112,17 @@ const insertFriend = (data) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.insertFriend = insertFriend;
 const insertRequest = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id, req_id, req_for_id, date, time, username, user_profile } = data;
-    const request = { req_id, req_for_id, date, time, username, user_profile };
+    const { id, req_id, name, req_by_id, req_for_id, date, time, username, user_profile, } = data;
+    const request = {
+        req_id,
+        req_by_id,
+        name,
+        req_for_id,
+        date,
+        time,
+        username,
+        user_profile,
+    };
     const resp = yield models_1.requestsModel
         .updateMany({ request_id: id }, { $push: { requests: request } })
         .then((result) => ({ success: true, result }))
@@ -141,6 +159,35 @@ const getAllUserData = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return data;
 });
 exports.getAllUserData = getAllUserData;
+const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield models_1.userModel
+        .find({})
+        .lean()
+        .then((result) => {
+        return {
+            success: true,
+            result: [
+                ...result.map((user) => {
+                    return {
+                        _id: user._id,
+                        name: user.name,
+                        user_name: user.user_name,
+                        user_id: user.user_id,
+                        profile_url: user.profile_url,
+                        email: user.email,
+                        request_id: user.request_id,
+                        chat_id: user.chat_id,
+                        friend_id: user.friend_id,
+                        dnd: user.dnd,
+                    };
+                }),
+            ],
+        };
+    })
+        .catch((err) => ({ err, success: false }));
+    return data;
+});
+exports.getAllUsers = getAllUsers;
 const getAllTodos = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const data = yield models_1.todoModel
         .find({ todo_id: id })
@@ -158,7 +205,7 @@ const getAllFriends = (id) => __awaiter(void 0, void 0, void 0, function* () {
         .lean()
         .then((result) => {
         console.log(result);
-        return { success: true, result };
+        return { success: true, result: result[0].friends };
     })
         .catch((err) => ({ err, success: false }));
     return data;
@@ -169,7 +216,7 @@ const getAllRequests = (id) => __awaiter(void 0, void 0, void 0, function* () {
         .find({ request_id: id })
         .lean()
         .then((result) => {
-        return { success: true, result };
+        return { success: true, result: result[0].requests };
     })
         .catch((err) => ({ err, success: false }));
     return data;
@@ -180,7 +227,7 @@ const getAllChats = (id) => __awaiter(void 0, void 0, void 0, function* () {
         .find({ chat_id: id })
         .lean()
         .then((result) => {
-        return { success: true, result };
+        return { success: true, result: result[0].chats };
     })
         .catch((err) => ({ err, success: false }));
     return data;

@@ -26,16 +26,16 @@ export const addChatController: RequestHandler = async (
   req: Request,
   res: Response
 ) => {
-  const { id, chat_id } = req.body;
+  const { id, chat_id, friendship_id, msg, receiver_id, sender_id } = req.body;
   const data = await insertChat({
     id,
     chat_id,
-    date: "a",
-    friendship_id: "b",
-    msg: "hi",
-    receiver_id: "D",
-    sender_id: "E",
-    time: "5:09",
+    date: "",
+    friendship_id,
+    msg,
+    receiver_id,
+    sender_id,
+    time: "",
   });
   console.log(data);
   return res.json({ data });

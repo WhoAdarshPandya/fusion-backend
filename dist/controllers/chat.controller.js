@@ -27,16 +27,16 @@ const getChatsController = (req, res) => __awaiter(void 0, void 0, void 0, funct
 });
 exports.getChatsController = getChatsController;
 const addChatController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id, chat_id } = req.body;
+    const { id, chat_id, friendship_id, msg, receiver_id, sender_id } = req.body;
     const data = yield (0, db_1.insertChat)({
         id,
         chat_id,
-        date: "a",
-        friendship_id: "b",
-        msg: "hi",
-        receiver_id: "D",
-        sender_id: "E",
-        time: "5:09",
+        date: "",
+        friendship_id,
+        msg,
+        receiver_id,
+        sender_id,
+        time: "",
     });
     console.log(data);
     return res.json({ data });

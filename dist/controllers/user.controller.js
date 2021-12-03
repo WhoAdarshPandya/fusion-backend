@@ -9,16 +9,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUserInfoController = exports.updateUserProfileController = exports.updateUserDndController = exports.updateUserNotificationController = exports.updateUserPasswordController = exports.deleteUserController = exports.userController = void 0;
+exports.updateUserInfoController = exports.updateUserProfileController = exports.updateUserDndController = exports.updateUserNotificationController = exports.updateUserPasswordController = exports.deleteUserController = exports.getAllUserController = exports.userController = void 0;
 const db_1 = require("./../db/");
 const bcrypt_1 = require("bcrypt");
 const userController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const data = yield (0, db_1.getAllUserData)(id);
-    console.log(data);
     return res.json({ data });
 });
 exports.userController = userController;
+const getAllUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const data = yield (0, db_1.getAllUsers)();
+    return res.json({ data });
+});
+exports.getAllUserController = getAllUserController;
 const deleteUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const data = yield (0, db_1.deleteUser)(id);

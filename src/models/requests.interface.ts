@@ -7,6 +7,7 @@ export interface Requests {
       req_for_id: String;
       date: String;
       time: String;
+      name: String;
       username: String;
       user_profile: String;
     }

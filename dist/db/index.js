@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUserProfile = exports.updateUserNotification = exports.updateUserInfo = exports.updateUserDND = exports.updatePassword = exports.updateTodo = exports.deleteRequest = exports.deleteTodo = exports.deleteChat = exports.deleteFriend = exports.deleteUser = exports.getAllTodos = exports.getAllRequests = exports.getAllFriends = exports.getAllChats = exports.insertRequest = exports.insertChat = exports.insertFriend = exports.insertTodo = exports.insertUser = exports.getAllUserData = exports.findUserByEmailOrUserName = void 0;
+exports.updateUserProfile = exports.updateUserNotification = exports.updateUserInfo = exports.updateUserDND = exports.updatePassword = exports.updateTodo = exports.deleteRequest = exports.deleteTodo = exports.deleteChat = exports.deleteFriend = exports.deleteUser = exports.getAllTodos = exports.getAllRequests = exports.getAllFriends = exports.getAllChats = exports.insertRequest = exports.insertChat = exports.insertFriend = exports.insertTodo = exports.insertUser = exports.getAllUsers = exports.getAllUserData = exports.findUserByEmailOrUserName = void 0;
 var db_helpers_1 = require("./db.helpers");
 Object.defineProperty(exports, "findUserByEmailOrUserName", { enumerable: true, get: function () { return db_helpers_1.findUserByEmailOrUserName; } });
 Object.defineProperty(exports, "getAllUserData", { enumerable: true, get: function () { return db_helpers_1.getAllUserData; } });
+Object.defineProperty(exports, "getAllUsers", { enumerable: true, get: function () { return db_helpers_1.getAllUsers; } });
 Object.defineProperty(exports, "insertUser", { enumerable: true, get: function () { return db_helpers_1.insertUser; } });
 Object.defineProperty(exports, "insertTodo", { enumerable: true, get: function () { return db_helpers_1.insertTodo; } });
 Object.defineProperty(exports, "insertFriend", { enumerable: true, get: function () { return db_helpers_1.insertFriend; } });

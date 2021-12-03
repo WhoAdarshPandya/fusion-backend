@@ -1,6 +1,7 @@
 export {
   findUserByEmailOrUserName,
   getAllUserData,
+  getAllUsers,
   insertUser,
   insertTodo,
   insertFriend,

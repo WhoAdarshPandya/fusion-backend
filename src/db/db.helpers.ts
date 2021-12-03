@@ -109,9 +109,30 @@ export const insertFriend = async (data: {
   friendship_id: string;
   date: string;
   time: string;
+  name: string;
+  user_name: string;
+  user_profile: string;
 }) => {
-  const { id, user_id, friendship_id, date, time } = data;
-  const friend = { id, user_id, friendship_id, date, time };
+  const {
+    id,
+    user_id,
+    friendship_id,
+    date,
+    time,
+    name,
+    user_name,
+    user_profile,
+  } = data;
+  const friend = {
+    id,
+    user_id,
+    friendship_id,
+    date,
+    time,
+    name,
+    user_name,
+    user_profile,
+  };
   const resp = await friendListModel
     .updateMany({ friend_id: id }, { $push: { friends: friend } })
     .then((result) => ({ success: true, result }))
@@ -121,15 +142,36 @@ export const insertFriend = async (data: {
 
 export const insertRequest = async (data: {
   id: string;
+  req_by_id: string;
   req_id: string;
   req_for_id: string;
+  name: string;
   date: string;
   time: string;
   username: string;
   user_profile: string;
 }) => {
-  const { id, req_id, req_for_id, date, time, username, user_profile } = data;
-  const request = { req_id, req_for_id, date, time, username, user_profile };
+  const {
+    id,
+    req_id,
+    name,
+    req_by_id,
+    req_for_id,
+    date,
+    time,
+    username,
+    user_profile,
+  } = data;
+  const request = {
+    req_id,
+    req_by_id,
+    name,
+    req_for_id,
+    date,
+    time,
+    username,
+    user_profile,
+  };
   const resp = await requestsModel
     .updateMany({ request_id: id }, { $push: { requests: request } })
     .then((result) => ({ success: true, result }))
@@ -184,6 +226,35 @@ export const getAllUserData = async (id: string) => {
   return data;
 };
 
+export const getAllUsers = async () => {
+  const data = await userModel
+    .find({})
+    .lean()
+    .then((result) => {
+      return {
+        success: true,
+        result: [
+          ...result.map((user) => {
+            return {
+              _id: user._id,
+              name: user.name,
+              user_name: user.user_name,
+              user_id: user.user_id,
+              profile_url: user.profile_url,
+              email: user.email,
+              request_id: user.request_id,
+              chat_id: user.chat_id,
+              friend_id: user.friend_id,
+              dnd: user.dnd,
+            };
+          }),
+        ],
+      };
+    })
+    .catch((err) => ({ err, success: false }));
+  return data;
+};
+
 export const getAllTodos = async (id: string) => {
   const data = await todoModel
     .find({ todo_id: id })
@@ -201,7 +272,7 @@ export const getAllFriends = async (id: string) => {
     .lean()
     .then((result) => {
       console.log(result);
-      return { success: true, result };
+      return { success: true, result: result[0].friends };
     })
     .catch((err) => ({ err, success: false }));
   return data;
@@ -212,7 +283,7 @@ export const getAllRequests = async (id: string) => {
     .find({ request_id: id })
     .lean()
     .then((result) => {
-      return { success: true, result };
+      return { success: true, result: result[0].requests };
     })
     .catch((err) => ({ err, success: false }));
   return data;
@@ -223,7 +294,7 @@ export const getAllChats = async (id: string) => {
     .find({ chat_id: id })
     .lean()
     .then((result) => {
-      return { success: true, result };
+      return { success: true, result: result[0].chats };
     })
     .catch((err) => ({ err, success: false }));
   return data;

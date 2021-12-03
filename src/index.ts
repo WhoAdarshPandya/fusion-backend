@@ -16,8 +16,9 @@ import {
   requestRouter,
 } from "./routes";
 import { verifyToken } from "./middleware";
-import { insertFriend } from "./db/db.helpers";
+import { insertRequest, insertFriend, insertChat } from "./db/";
 import expressFileUpload, { UploadedFile } from "express-fileupload";
+import { v4 } from "uuid";
 import fs from "fs";
 
 /*
@@ -30,19 +31,128 @@ config();
 const PORT = process.env.PORT;
 const app: Application = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, { cors: { origin: "*" } });
 
 app.use(helmet());
 app.use(cors());
 app.use(expressFileUpload({ createParentPath: true }));
 app.use(express.json());
-app.use(limiter);
+// app.use(limiter);
 
 connectDB();
 initCloudinary();
 
 io.on("connection", (socket: Socket) => {
-  // console.log(socket);
+  socket.on(
+    "sendReqEvent",
+    async ({
+      id,
+      req_for_id,
+      req_id,
+      user_profile,
+      username,
+      name,
+      req_by_id,
+    }) => {
+      const data = await insertRequest({
+        id,
+        req_by_id,
+        req_id,
+        req_for_id,
+        name,
+        date: "f",
+        time: "",
+        username,
+        user_profile,
+      });
+      if (data.success) {
+        io.emit(`new_req${req_for_id}`, {
+          msg: `${name} sent you friend request`,
+        });
+      }
+    }
+  );
+
+  socket.on(
+    "accepted_req",
+    async ({
+      frinal_friend_id,
+      f_user_id,
+      friendship_id,
+      date,
+      time,
+      f_name,
+      f_user_name,
+      f_user_profile,
+      user_id,
+    }) => {
+      const data = await insertFriend({
+        id: frinal_friend_id,
+        user_id: f_user_id,
+        user_name: f_user_name,
+        user_profile: f_user_profile,
+        date,
+        time,
+        friendship_id,
+        name: f_name,
+      });
+      if (data.success) {
+        console.log(data);
+        io.emit(`accepted${user_id}`, {
+          msg: `${f_name} accepted your friend request`,
+        });
+      }
+    }
+  );
+
+  socket.on("updateFriends", () => {
+    io.emit("updateFriends", {});
+  });
+
+  socket.on(
+    "new_msg",
+    async ({
+      chat_id,
+      another_chat_id,
+      msg,
+      sender_id,
+      receiver_id,
+      friendship_id,
+      date,
+      time,
+      anonymousMode,
+    }) => {
+      if (!anonymousMode) {
+        await insertChat({
+          id: chat_id,
+          chat_id: v4(),
+          date,
+          time,
+          friendship_id,
+          msg,
+          receiver_id,
+          sender_id,
+        });
+        await insertChat({
+          id: another_chat_id,
+          chat_id: v4(),
+          date,
+          time,
+          friendship_id,
+          msg,
+          receiver_id,
+          sender_id,
+        });
+      }
+      io.emit(`loadChat${sender_id}`, { updateChat: true });
+      io.emit(`new_incoming_msg${receiver_id}`, {
+        chat_id,
+        sender_id,
+        msg,
+        friendship_id,
+      });
+    }
+  );
 });
 
 // ?Routes
@@ -63,7 +173,7 @@ app.use("/api/v1/todos", verifyToken, todoRouter);
 app.use("/api/v1/friends/", verifyToken, friendsRouter);
 
 // verified get,delete,add
-app.use("/api/v1/chats", verifyToken, chatRouter);
+app.use("/api/v1/chats", chatRouter);
 
 // verified get,delete,add
 app.use("/api/v1/requests", verifyToken, requestRouter);

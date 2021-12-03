@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   deleteUserController,
+  getAllUserController,
   updateUserPasswordController,
   userController,
   updateUserDndController,
@@ -14,6 +15,8 @@ export const userRouter = Router();
 userRouter.get("/getalldata/:id", userController);
 
 // userRouter.post("/adduser", userController);
+
+userRouter.get("/getallusers/", getAllUserController);
 
 userRouter.get("/deleteuser/:id", deleteUserController);
 

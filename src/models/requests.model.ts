@@ -12,6 +12,7 @@ const RequestSchema: Schema<Requests> = new Schema<Requests>({
         date: String,
         time: String,
         username: String,
+        name: String,
         user_profile: String,
       },
     ],

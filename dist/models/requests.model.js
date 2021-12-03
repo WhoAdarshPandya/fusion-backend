@@ -13,6 +13,7 @@ const RequestSchema = new mongoose_1.Schema({
                 date: String,
                 time: String,
                 username: String,
+                name: String,
                 user_profile: String,
             },
         ],

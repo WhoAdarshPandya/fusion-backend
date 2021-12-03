@@ -2,6 +2,7 @@ export { loginHandler } from "./login.controller";
 export { signUpHandler } from "./signup.controller";
 export {
   userController,
+  getAllUserController,
   deleteUserController,
   updateUserPasswordController,
   updateUserDndController,
