@@ -22,10 +22,9 @@ const http_1 = __importDefault(require("http"));
 const socket_io_1 = require("socket.io");
 const routes_1 = require("./routes");
 const middleware_1 = require("./middleware");
-const db_1 = require("./db/");
+const socket_1 = require("./socket");
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
-const uuid_1 = require("uuid");
-const fs_1 = __importDefault(require("fs"));
+const controllers_1 = require("./controllers");
 (0, dotenv_1.config)();
 const PORT = process.env.PORT;
 const app = (0, express_1.default)();
@@ -35,78 +34,21 @@ app.use((0, helmet_1.default)());
 app.use((0, cors_1.default)());
 app.use((0, express_fileupload_1.default)({ createParentPath: true }));
 app.use(express_1.default.json());
+app.use(utils_1.limiter);
 (0, config_1.connectDB)();
 (0, utils_1.initCloudinary)();
 io.on("connection", (socket) => {
     socket.on("sendReqEvent", ({ id, req_for_id, req_id, user_profile, username, name, req_by_id, }) => __awaiter(void 0, void 0, void 0, function* () {
-        const data = yield (0, db_1.insertRequest)({
-            id,
-            req_by_id,
-            req_id,
-            req_for_id,
-            name,
-            date: "f",
-            time: "",
-            username,
-            user_profile,
-        });
-        if (data.success) {
-            io.emit(`new_req${req_for_id}`, {
-                msg: `${name} sent you friend request`,
-            });
-        }
+        yield (0, socket_1.sendReqEvent)(io, id, req_for_id, req_id, user_profile, username, name, req_by_id);
     }));
     socket.on("accepted_req", ({ frinal_friend_id, f_user_id, friendship_id, date, time, f_name, f_user_name, f_user_profile, user_id, }) => __awaiter(void 0, void 0, void 0, function* () {
-        const data = yield (0, db_1.insertFriend)({
-            id: frinal_friend_id,
-            user_id: f_user_id,
-            user_name: f_user_name,
-            user_profile: f_user_profile,
-            date,
-            time,
-            friendship_id,
-            name: f_name,
-        });
-        if (data.success) {
-            console.log(data);
-            io.emit(`accepted${user_id}`, {
-                msg: `${f_name} accepted your friend request`,
-            });
-        }
+        yield (0, socket_1.acceptedReqEvent)(io, frinal_friend_id, f_user_id, friendship_id, date, time, f_name, f_user_name, f_user_profile, user_id);
     }));
-    socket.on("updateFriends", () => {
-        io.emit("updateFriends", {});
-    });
+    socket.on("updateFriends", () => __awaiter(void 0, void 0, void 0, function* () {
+        yield (0, socket_1.updateFriends)(io);
+    }));
     socket.on("new_msg", ({ chat_id, another_chat_id, msg, sender_id, receiver_id, friendship_id, date, time, anonymousMode, }) => __awaiter(void 0, void 0, void 0, function* () {
-        if (!anonymousMode) {
-            yield (0, db_1.insertChat)({
-                id: chat_id,
-                chat_id: (0, uuid_1.v4)(),
-                date,
-                time,
-                friendship_id,
-                msg,
-                receiver_id,
-                sender_id,
-            });
-            yield (0, db_1.insertChat)({
-                id: another_chat_id,
-                chat_id: (0, uuid_1.v4)(),
-                date,
-                time,
-                friendship_id,
-                msg,
-                receiver_id,
-                sender_id,
-            });
-        }
-        io.emit(`loadChat${sender_id}`, { updateChat: true });
-        io.emit(`new_incoming_msg${receiver_id}`, {
-            chat_id,
-            sender_id,
-            msg,
-            friendship_id,
-        });
+        yield (0, socket_1.newMsgEvent)(io, chat_id, another_chat_id, msg, sender_id, receiver_id, friendship_id, date, time, anonymousMode);
     }));
 });
 app.get("/", (req, res) => {
@@ -117,43 +59,14 @@ app.use("/api/v1/signup", routes_1.signUpRouter);
 app.use("/api/v1/user", middleware_1.verifyToken, routes_1.userRouter);
 app.use("/api/v1/todos", middleware_1.verifyToken, routes_1.todoRouter);
 app.use("/api/v1/friends/", middleware_1.verifyToken, routes_1.friendsRouter);
-app.use("/api/v1/chats", routes_1.chatRouter);
+app.use("/api/v1/chats", middleware_1.verifyToken, routes_1.chatRouter);
 app.use("/api/v1/requests", middleware_1.verifyToken, routes_1.requestRouter);
 app.get("/api/private", middleware_1.verifyToken, (req, res) => {
     res.json({ msg: "hello" });
 });
-app.post("/api/v1/uploadimage", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (req.files === null || req.files === undefined) {
-        return res.status(200).json({ msg: "no image provided", success: false });
-    }
-    const file = req.files.ProfileImage;
-    const ImageUrl = `IMG_${Date.now()}_${file.name}`;
-    file.mv(`${__dirname}/src/assets/${ImageUrl}`, (err) => __awaiter(void 0, void 0, void 0, function* () {
-        if (err) {
-            return res.status(200).json({ message: "server error", success: false });
-        }
-        else {
-            yield (0, utils_1.uploadImage)(`${__dirname}/src/assets/${ImageUrl}`)
-                .then((result) => {
-                console.log(result);
-                fs_1.default.rm(`${__dirname}/src/assets/${ImageUrl}`, (err) => {
-                    console.log(err);
-                });
-                return res.json({
-                    msg: "image uploaded!",
-                    url: result.secure_url,
-                    success: true,
-                });
-            })
-                .catch((err) => {
-                console.log(err);
-                return res.json({ msg: "error occured", success: false, err });
-            });
-        }
-    }));
-}));
+app.post("/api/v1/uploadimage", controllers_1.imageUploadController);
 app.get("*", (req, res) => {
-    return res.json({
+    return res.status(404).json({
         msg: "Seems like we're always thinking of ourselves when looking for something that's lost, but we never think much about the lost, whatever, whoever is unable to be found, whether it's a set of keys left somewhere and forgotten, a couple of guys wandering aimlessly in the woods, or someone who's disappeared inside himself. What if that's what they wanted all along? Not to be found.",
         success: false,
     });

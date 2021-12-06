@@ -16,13 +16,21 @@ import {
   requestRouter,
 } from "./routes";
 import { verifyToken } from "./middleware";
+import {
+  acceptedReqEvent,
+  newMsgEvent,
+  sendReqEvent,
+  updateFriends,
+} from "./socket";
 import { insertRequest, insertFriend, insertChat } from "./db/";
 import expressFileUpload, { UploadedFile } from "express-fileupload";
-import { v4 } from "uuid";
 import fs from "fs";
+import { v4 } from "uuid";
+import { DefaultEventsMap } from "socket.io/dist/typed-events";
+import { imageUploadController } from "./controllers";
 
 /*
- * अपनी रचनाओं में वो ज़िंदा है
+ * अपनी रचनाओं में वो ज़िंदा है,
  * 'नूर' संसार से गया ही नहीं
  */
 
@@ -30,14 +38,15 @@ config();
 
 const PORT = process.env.PORT;
 const app: Application = express();
-const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: "*" } });
+const server: http.Server = http.createServer(app);
+const io: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap> =
+  new Server(server, { cors: { origin: "*" } });
 
 app.use(helmet());
 app.use(cors());
 app.use(expressFileUpload({ createParentPath: true }));
 app.use(express.json());
-// app.use(limiter);
+app.use(limiter);
 
 connectDB();
 initCloudinary();
@@ -54,22 +63,16 @@ io.on("connection", (socket: Socket) => {
       name,
       req_by_id,
     }) => {
-      const data = await insertRequest({
+      await sendReqEvent(
+        io,
         id,
-        req_by_id,
-        req_id,
         req_for_id,
-        name,
-        date: "f",
-        time: "",
-        username,
+        req_id,
         user_profile,
-      });
-      if (data.success) {
-        io.emit(`new_req${req_for_id}`, {
-          msg: `${name} sent you friend request`,
-        });
-      }
+        username,
+        name,
+        req_by_id
+      );
     }
   );
 
@@ -86,27 +89,23 @@ io.on("connection", (socket: Socket) => {
       f_user_profile,
       user_id,
     }) => {
-      const data = await insertFriend({
-        id: frinal_friend_id,
-        user_id: f_user_id,
-        user_name: f_user_name,
-        user_profile: f_user_profile,
+      await acceptedReqEvent(
+        io,
+        frinal_friend_id,
+        f_user_id,
+        friendship_id,
         date,
         time,
-        friendship_id,
-        name: f_name,
-      });
-      if (data.success) {
-        console.log(data);
-        io.emit(`accepted${user_id}`, {
-          msg: `${f_name} accepted your friend request`,
-        });
-      }
+        f_name,
+        f_user_name,
+        f_user_profile,
+        user_id
+      );
     }
   );
 
-  socket.on("updateFriends", () => {
-    io.emit("updateFriends", {});
+  socket.on("updateFriends", async () => {
+    await updateFriends(io);
   });
 
   socket.on(
@@ -122,35 +121,18 @@ io.on("connection", (socket: Socket) => {
       time,
       anonymousMode,
     }) => {
-      if (!anonymousMode) {
-        await insertChat({
-          id: chat_id,
-          chat_id: v4(),
-          date,
-          time,
-          friendship_id,
-          msg,
-          receiver_id,
-          sender_id,
-        });
-        await insertChat({
-          id: another_chat_id,
-          chat_id: v4(),
-          date,
-          time,
-          friendship_id,
-          msg,
-          receiver_id,
-          sender_id,
-        });
-      }
-      io.emit(`loadChat${sender_id}`, { updateChat: true });
-      io.emit(`new_incoming_msg${receiver_id}`, {
+      await newMsgEvent(
+        io,
         chat_id,
-        sender_id,
+        another_chat_id,
         msg,
+        sender_id,
+        receiver_id,
         friendship_id,
-      });
+        date,
+        time,
+        anonymousMode
+      );
     }
   );
 });
@@ -173,7 +155,7 @@ app.use("/api/v1/todos", verifyToken, todoRouter);
 app.use("/api/v1/friends/", verifyToken, friendsRouter);
 
 // verified get,delete,add
-app.use("/api/v1/chats", chatRouter);
+app.use("/api/v1/chats", verifyToken, chatRouter);
 
 // verified get,delete,add
 app.use("/api/v1/requests", verifyToken, requestRouter);
@@ -184,39 +166,11 @@ app.get("/api/private", verifyToken, (req, res) => {
 });
 
 // verified
-app.post("/api/v1/uploadimage", async (req, res) => {
-  if (req.files === null || req.files === undefined) {
-    return res.status(200).json({ msg: "no image provided", success: false });
-  }
-  const file = req.files!.ProfileImage as UploadedFile;
-  const ImageUrl = `IMG_${Date.now()}_${file.name}`;
-  file.mv(`${__dirname}/src/assets/${ImageUrl}`, async (err) => {
-    if (err) {
-      return res.status(200).json({ message: "server error", success: false });
-    } else {
-      await uploadImage(`${__dirname}/src/assets/${ImageUrl}`)
-        .then((result) => {
-          console.log(result);
-          fs.rm(`${__dirname}/src/assets/${ImageUrl}`, (err) => {
-            console.log(err);
-          });
-          return res.json({
-            msg: "image uploaded!",
-            url: result.secure_url,
-            success: true,
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          return res.json({ msg: "error occured", success: false, err });
-        });
-    }
-  });
-});
+app.post("/api/v1/uploadimage", imageUploadController);
 
 // 404
 app.get("*", (req, res) => {
-  return res.json({
+  return res.status(404).json({
     msg: "Seems like we're always thinking of ourselves when looking for something that's lost, but we never think much about the lost, whatever, whoever is unable to be found, whether it's a set of keys left somewhere and forgotten, a couple of guys wandering aimlessly in the woods, or someone who's disappeared inside himself. What if that's what they wanted all along? Not to be found.",
     success: false,
   });

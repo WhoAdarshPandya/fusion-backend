@@ -31,3 +31,4 @@ export {
   deleteRequestController,
   getRequestsController,
 } from "./request.controller";
+export { imageUploadController } from "./image.controller";

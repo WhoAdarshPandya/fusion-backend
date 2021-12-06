@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getRequestsController = exports.deleteRequestController = exports.addRequestController = exports.updateTodoController = exports.getTodosController = exports.deleteTodoController = exports.addTodoController = exports.getChatsController = exports.deleteChatController = exports.addChatController = exports.addFriendController = exports.getFriendsController = exports.deleteFriendController = exports.updateUserProfileController = exports.updateUserNotificationController = exports.updateUserInfoController = exports.updateUserDndController = exports.updateUserPasswordController = exports.deleteUserController = exports.getAllUserController = exports.userController = exports.signUpHandler = exports.loginHandler = void 0;
+exports.imageUploadController = exports.getRequestsController = exports.deleteRequestController = exports.addRequestController = exports.updateTodoController = exports.getTodosController = exports.deleteTodoController = exports.addTodoController = exports.getChatsController = exports.deleteChatController = exports.addChatController = exports.addFriendController = exports.getFriendsController = exports.deleteFriendController = exports.updateUserProfileController = exports.updateUserNotificationController = exports.updateUserInfoController = exports.updateUserDndController = exports.updateUserPasswordController = exports.deleteUserController = exports.getAllUserController = exports.userController = exports.signUpHandler = exports.loginHandler = void 0;
 var login_controller_1 = require("./login.controller");
 Object.defineProperty(exports, "loginHandler", { enumerable: true, get: function () { return login_controller_1.loginHandler; } });
 var signup_controller_1 = require("./signup.controller");
@@ -31,4 +31,6 @@ var request_controller_1 = require("./request.controller");
 Object.defineProperty(exports, "addRequestController", { enumerable: true, get: function () { return request_controller_1.addRequestController; } });
 Object.defineProperty(exports, "deleteRequestController", { enumerable: true, get: function () { return request_controller_1.deleteRequestController; } });
 Object.defineProperty(exports, "getRequestsController", { enumerable: true, get: function () { return request_controller_1.getRequestsController; } });
+var image_controller_1 = require("./image.controller");
+Object.defineProperty(exports, "imageUploadController", { enumerable: true, get: function () { return image_controller_1.imageUploadController; } });
 //# sourceMappingURL=index.js.map

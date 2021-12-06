@@ -7,7 +7,7 @@ exports.limiter = void 0;
 const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 exports.limiter = (0, express_rate_limit_1.default)({
     windowMs: 10 * 60 * 1000,
-    max: 200,
+    max: 2000,
     statusCode: 200,
     message: JSON.stringify({ msg: "You're being rate limited", success: false }),
 });
