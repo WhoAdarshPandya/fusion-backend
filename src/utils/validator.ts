@@ -22,7 +22,7 @@ export const loginValidator = (data: any): ValidationResult => {
   }
 };
 
-export const signUpValidator = (data: any) => {
+export const signUpValidator = (data: any): ValidationResult => {
   let checkSchema = joi.object({
     name: joi.string().required(),
     user_name: joi.string().required().min(6).max(15).token().lowercase(),

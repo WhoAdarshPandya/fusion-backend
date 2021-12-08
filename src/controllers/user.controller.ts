@@ -47,12 +47,12 @@ export const updateUserPasswordController: RequestHandler = async (
   res: Response
 ) => {
   const { id, email, old_pass, new_pass } = req.body;
-  const datata = await findUserByEmailOrUserName({
+  const user_data = await findUserByEmailOrUserName({
     type: "email",
     value: email,
   });
-  if (datata.success && datata.count > 0) {
-    const db_pass = datata.res[0].password;
+  if (user_data.success && user_data.count > 0) {
+    const db_pass = user_data.res[0].password;
     const db_decrypted_pass = compareSync(old_pass, db_pass);
     if (db_decrypted_pass) {
       let new_pass_enc = hashSync(new_pass, 10);

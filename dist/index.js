@@ -38,17 +38,17 @@ app.use(utils_1.limiter);
 (0, config_1.connectDB)();
 (0, utils_1.initCloudinary)();
 io.on("connection", (socket) => {
-    socket.on("sendReqEvent", ({ id, req_for_id, req_id, user_profile, username, name, req_by_id, }) => __awaiter(void 0, void 0, void 0, function* () {
-        yield (0, socket_1.sendReqEvent)(io, id, req_for_id, req_id, user_profile, username, name, req_by_id);
+    socket.on("sendReqEvent", ({ token, id, req_for_id, req_id, user_profile, username, name, req_by_id, }) => __awaiter(void 0, void 0, void 0, function* () {
+        yield (0, socket_1.sendReqEvent)(token, io, id, req_for_id, req_id, user_profile, username, name, req_by_id);
     }));
-    socket.on("accepted_req", ({ frinal_friend_id, f_user_id, friendship_id, date, time, f_name, f_user_name, f_user_profile, user_id, }) => __awaiter(void 0, void 0, void 0, function* () {
-        yield (0, socket_1.acceptedReqEvent)(io, frinal_friend_id, f_user_id, friendship_id, date, time, f_name, f_user_name, f_user_profile, user_id);
+    socket.on("accepted_req", ({ token, frinal_friend_id, f_user_id, friendship_id, date, time, f_name, f_user_name, f_user_profile, user_id, }) => __awaiter(void 0, void 0, void 0, function* () {
+        yield (0, socket_1.acceptedReqEvent)(token, io, frinal_friend_id, f_user_id, friendship_id, date, time, f_name, f_user_name, f_user_profile, user_id);
     }));
-    socket.on("updateFriends", () => __awaiter(void 0, void 0, void 0, function* () {
-        yield (0, socket_1.updateFriends)(io);
+    socket.on("updateFriends", ({ token }) => __awaiter(void 0, void 0, void 0, function* () {
+        yield (0, socket_1.updateFriends)(token, io);
     }));
-    socket.on("new_msg", ({ chat_id, another_chat_id, msg, sender_id, receiver_id, friendship_id, date, time, anonymousMode, }) => __awaiter(void 0, void 0, void 0, function* () {
-        yield (0, socket_1.newMsgEvent)(io, chat_id, another_chat_id, msg, sender_id, receiver_id, friendship_id, date, time, anonymousMode);
+    socket.on("new_msg", ({ token, chat_id, another_chat_id, msg, sender_id, receiver_id, friendship_id, date, time, anonymousMode, name, }) => __awaiter(void 0, void 0, void 0, function* () {
+        yield (0, socket_1.newMsgEvent)(token, io, chat_id, another_chat_id, msg, sender_id, receiver_id, friendship_id, date, time, anonymousMode, name);
     }));
 });
 app.get("/", (req, res) => {

@@ -14,5 +14,4 @@ todoRouter.post("/addtodo", addTodoController);
 
 todoRouter.get("/deletetodo/:todo_master_id/:todo_id", deleteTodoController);
 
-//pending
 todoRouter.post("/updatetodo", updateTodoController);

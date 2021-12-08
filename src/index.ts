@@ -55,6 +55,7 @@ io.on("connection", (socket: Socket) => {
   socket.on(
     "sendReqEvent",
     async ({
+      token,
       id,
       req_for_id,
       req_id,
@@ -64,6 +65,7 @@ io.on("connection", (socket: Socket) => {
       req_by_id,
     }) => {
       await sendReqEvent(
+        token,
         io,
         id,
         req_for_id,
@@ -79,6 +81,7 @@ io.on("connection", (socket: Socket) => {
   socket.on(
     "accepted_req",
     async ({
+      token,
       frinal_friend_id,
       f_user_id,
       friendship_id,
@@ -90,6 +93,7 @@ io.on("connection", (socket: Socket) => {
       user_id,
     }) => {
       await acceptedReqEvent(
+        token,
         io,
         frinal_friend_id,
         f_user_id,
@@ -104,13 +108,14 @@ io.on("connection", (socket: Socket) => {
     }
   );
 
-  socket.on("updateFriends", async () => {
-    await updateFriends(io);
+  socket.on("updateFriends", async ({ token }) => {
+    await updateFriends(token, io);
   });
 
   socket.on(
     "new_msg",
     async ({
+      token,
       chat_id,
       another_chat_id,
       msg,
@@ -120,8 +125,10 @@ io.on("connection", (socket: Socket) => {
       date,
       time,
       anonymousMode,
+      name,
     }) => {
       await newMsgEvent(
+        token,
         io,
         chat_id,
         another_chat_id,
@@ -131,7 +138,8 @@ io.on("connection", (socket: Socket) => {
         friendship_id,
         date,
         time,
-        anonymousMode
+        anonymousMode,
+        name
       );
     }
   );

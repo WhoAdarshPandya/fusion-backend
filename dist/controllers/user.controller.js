@@ -33,12 +33,12 @@ const deleteUserController = (req, res) => __awaiter(void 0, void 0, void 0, fun
 exports.deleteUserController = deleteUserController;
 const updateUserPasswordController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id, email, old_pass, new_pass } = req.body;
-    const datata = yield (0, db_1.findUserByEmailOrUserName)({
+    const user_data = yield (0, db_1.findUserByEmailOrUserName)({
         type: "email",
         value: email,
     });
-    if (datata.success && datata.count > 0) {
-        const db_pass = datata.res[0].password;
+    if (user_data.success && user_data.count > 0) {
+        const db_pass = user_data.res[0].password;
         const db_decrypted_pass = (0, bcrypt_1.compareSync)(old_pass, db_pass);
         if (db_decrypted_pass) {
             let new_pass_enc = (0, bcrypt_1.hashSync)(new_pass, 10);

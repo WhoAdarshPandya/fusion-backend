@@ -20,16 +20,19 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = require("dotenv");
 (0, dotenv_1.config)();
 const loginHandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("reached");
     const { error } = (0, utils_1.loginValidator)(req.body);
     if (error)
         return res.status(200).json({ msg: error.details[0].message });
-    const { type, password } = req.body;
+    const { type, email, password } = yield req.body;
+    console.log(type, email, password);
     if (type === "email") {
         const userData = yield (0, db_1.findUserByEmailOrUserName)({
             type: "email",
-            value: req.body.email,
+            value: email,
         });
-        if (userData && userData.success) {
+        console.log(userData);
+        if (userData.success) {
             if (userData.count > 0) {
                 let pwd = userData.res[0].password;
                 let isValid = (0, bcrypt_1.compareSync)(password, pwd);
@@ -52,8 +55,11 @@ const loginHandler = (req, res) => __awaiter(void 0, void 0, void 0, function* (
                 res.json({ msg: "no user found", success: false });
             }
         }
+        else {
+            res.json({ msg: "user not found try again later", success: false });
+        }
     }
-    if (type === "user_name") {
+    else if (type === "user_name") {
         const userData = yield (0, db_1.findUserByEmailOrUserName)({
             type: "user_name",
             value: req.body.user_name,
@@ -64,7 +70,7 @@ const loginHandler = (req, res) => __awaiter(void 0, void 0, void 0, function* (
                 let isValid = (0, bcrypt_1.compareSync)(password, pwd);
                 if (isValid) {
                     const token = jsonwebtoken_1.default.sign({ user: userData.res[0] }, process.env.SECRET_TOKEN, {
-                        expiresIn: "2h",
+                        expiresIn: "5h",
                     });
                     return res.json({
                         msg: "log in successful",
@@ -84,6 +90,9 @@ const loginHandler = (req, res) => __awaiter(void 0, void 0, void 0, function* (
                 return res.json({ msg: "no user found", success: false });
             }
         }
+    }
+    else {
+        return res.json({ msg: "looked for this?", success: false });
     }
 });
 exports.loginHandler = loginHandler;
